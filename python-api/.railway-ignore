@@ -1,0 +1,8 @@
+# .railway-ignore - tells Railway to ignore these files
+node_modules/
+*.log
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+

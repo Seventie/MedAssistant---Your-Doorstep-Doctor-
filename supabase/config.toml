@@ -1,0 +1,13 @@
+project_id = "zztjlzsdkekkbqxuqudv"
+
+[functions.medical-qa]
+verify_jwt = false
+
+[functions.medicine-recommendations]
+verify_jwt = false
+
+[functions.medicine-search]
+verify_jwt = false
+
+[functions.visualizations]
+verify_jwt = false
