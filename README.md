@@ -163,16 +163,28 @@ sequenceDiagram
 
 ```mermaid
 flowchart TD
-    A[Symptoms + Additional Info] --> B[NER + noun-chunk extraction]
-    B --> C[Match tokens to KG nodes]
-    C --> D[Expand subgraph (radius=2)]
-    A --> E[Sentence-Transformer embedding]
-    E --> F[Top‑K semantic rows via FAISS]
-    D --> G[KG triples]
-    F --> H[Dataset row context]
-    G --> I[Compose final context]
+    A[Symptoms + Additional Info]
+    B[NER + noun-chunk extraction]
+    C[Match tokens to KG nodes]
+    D[Expand subgraph radius=2]
+    E[Sentence-Transformer embedding]
+    F[Top-K semantic rows via FAISS]
+    G[KG triples]
+    H[Dataset row context]
+    I[Compose final context]
+    J[Groq LLM answer]
+
+    A --> B
+    B --> C
+    C --> D
+    A --> E
+    E --> F
+    D --> G
+    F --> H
+    G --> I
     H --> I
-    I --> J[Groq LLM answer]
+    I --> J
+
 ```
 
 **Key implementation facts (from `medical_v3.py`):**
