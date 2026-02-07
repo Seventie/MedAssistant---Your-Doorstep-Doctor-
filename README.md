@@ -2,14 +2,11 @@
 
 An end-to-end, Retrieval-Augmented Generation (RAG) medical assistant that combines a React frontend with **two dedicated Python servers**: one optimized for medical Q&A and another for knowledge-graph-driven medicine recommendations. The project uses two Kaggle datasets, NLP pipelines (NER, embeddings, TF-IDF), and knowledge graph expansion to deliver contextual answers and recommendations.
 
-> **Datasets used**
-> - **MedQuAD**: https://www.kaggle.com/datasets/pythonafroz/medquad-medical-question-answer-for-ai-research
-> - **Drugs, Side Effects, and Medical Conditions**: https://www.kaggle.com/datasets/jithinanievarghese/drugs-side-effects-and-medical-condition
-
 ---
 
 ## Table of Contents
 - [What was built](#what-was-built)
+- [Datasets](#datasets)
 - [System architecture](#system-architecture)
 - [End-to-end workflow](#end-to-end-workflow)
 - [Data preparation & artifacts](#data-preparation--artifacts)
@@ -34,6 +31,14 @@ The goal of MedAssistant is to answer medical questions **and** suggest medicine
 5. **LLM generation** via Groq, grounded on retrieved context.
 
 The core idea is: **retrieve first, then generate**. Each server handles a specific retrieval workflow and sends the resulting context to the LLM.
+
+---
+
+## Datasets
+| Dataset | Purpose | Output files |
+| --- | --- | --- |
+| [MedQuAD](https://www.kaggle.com/datasets/pythonafroz/medquad-medical-question-answer-for-ai-research) | Medical Q&A corpus for DPR retrieval | `python-api/data/medquad_processed.csv`, `python-api/embeddings/encoded_docs.npy` |
+| [Drugs, Side Effects, and Medical Conditions](https://www.kaggle.com/datasets/jithinanievarghese/drugs-side-effects-and-medical-condition) | Drug/condition knowledge base for KG-RAG | `python-api/drugs_side_effects.csv`, `python-api/kg_rag_artifacts/*` |
 
 ---
 
@@ -81,7 +86,7 @@ flowchart LR
 ---
 
 ## Data preparation & artifacts
-Artifacts are precomputed in notebooks and stored in `python-api/embeddings` and `python-api/kg_rag_artifacts` so the servers can respond quickly at runtime. These artifacts are included in the repository; to regenerate them, follow the data-prep notebooks in `notebooks/` (for example, `medquadqa.ipynb` and `medicinerecommendation.ipynb`) to rebuild the cleaned CSVs, embeddings, FAISS indices, and knowledge graph outputs.
+Artifacts are precomputed in notebooks and stored in `python-api/embeddings` and `python-api/kg_rag_artifacts` so the servers can respond quickly at runtime. These artifacts are included in the repository. To regenerate them, follow the data-prep notebooks in `notebooks/` (for example, `medquadqa.ipynb` and `medicinerecommendation.ipynb`) to rebuild the cleaned CSVs, embeddings, FAISS indices, and knowledge graph outputs.
 
 ```mermaid
 flowchart TD
@@ -120,7 +125,9 @@ The backend intentionally uses **two separate servers** for clarity and scalabil
 | **QA Server** | `python-api/qa_server.py` | `5001` | DPR + FAISS + Groq RAG for medical Q&A |
 | **Recommendation Server** | `python-api/recommendations_server.py` | `5002` | HTTP wrapper that imports the KG-RAG pipeline in `medical_v3.py` for medicine recommendations |
 
-> There is also a combined `python-api/app.py` server (default port `5000`) for a unified API, but the **primary workflow uses the two servers above**.
+`recommendations_server.py` is a thin Flask wrapper that imports the KG-RAG pipeline logic from `medical_v3.py`.
+
+> There is also a combined `python-api/app.py` server (default port `5000`) for quick demos or unified testing, but the **primary workflow uses the two servers above**.
 
 ---
 
@@ -263,8 +270,6 @@ python qa_server.py
 cd python-api
 python recommendations_server.py
 ```
-`recommendations_server.py` is a thin Flask wrapper that imports the KG-RAG pipeline logic from `medical_v3.py`.
-
 ### 4) Environment variable
 Set your Groq key before running the servers:
 ```bash
