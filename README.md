@@ -81,7 +81,7 @@ flowchart LR
 ---
 
 ## Data preparation & artifacts
-Artifacts are precomputed in notebooks and stored in `python-api/embeddings` and `python-api/kg_rag_artifacts` so the servers can respond quickly at runtime.
+Artifacts are precomputed in notebooks and stored in `python-api/embeddings` and `python-api/kg_rag_artifacts` so the servers can respond quickly at runtime. These artifacts are included in the repository; to regenerate them, follow the data-prep notebooks in `notebooks/` (for example, `medquadqa.ipynb` and `medicinerecommendation.ipynb`) to rebuild the cleaned CSVs, embeddings, FAISS indices, and knowledge graph outputs.
 
 ```mermaid
 flowchart TD
@@ -118,9 +118,9 @@ The backend intentionally uses **two separate servers** for clarity and scalabil
 | Server | Script | Port | Purpose |
 | --- | --- | --- | --- |
 | **QA Server** | `python-api/qa_server.py` | `5001` | DPR + FAISS + Groq RAG for medical Q&A |
-| **Recommendation Server** | `python-api/recommendations_server.py` (wrapper) + `python-api/medical_v3.py` (pipeline) | `5002` | KG-RAG + NER + semantic retrieval for medicine recommendations |
+| **Recommendation Server** | `python-api/recommendations_server.py` | `5002` | HTTP wrapper that imports the KG-RAG pipeline in `medical_v3.py` for medicine recommendations |
 
-> There is also a combined `python-api/app.py` server for a unified API, but the **primary workflow uses the two servers above**.
+> There is also a combined `python-api/app.py` server (default port `5000`) for a unified API, but the **primary workflow uses the two servers above**.
 
 ---
 
