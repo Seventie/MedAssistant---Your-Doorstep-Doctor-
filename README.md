@@ -3,7 +3,7 @@
 An end-to-end, Retrieval-Augmented Generation (RAG) medical assistant that combines a React frontend with **two dedicated Python servers**: one optimized for medical Q&A and another for knowledge-graph-driven medicine recommendations. The project uses two Kaggle datasets, NLP pipelines (NER, embeddings, TF-IDF), and knowledge graph expansion to deliver contextual answers and recommendations.
 
 > **Datasets used**
-> - **MedQuAD**: https://www.kaggle.com/datasets/pythonafroz/medquad-medical-question-answer-for-ai-research  
+> - **MedQuAD**: https://www.kaggle.com/datasets/pythonafroz/medquad-medical-question-answer-for-ai-research
 > - **Drugs, Side Effects, and Medical Conditions**: https://www.kaggle.com/datasets/jithinanievarghese/drugs-side-effects-and-medical-condition
 
 ---
@@ -108,7 +108,7 @@ flowchart TD
 | `faiss.index` | `python-api/kg_rag_artifacts/` | Dense search index |
 | `medical_kg.graphml` | `python-api/kg_rag_artifacts/` | Knowledge graph structure |
 | `ner_entities.csv` | `python-api/kg_rag_artifacts/` | Extracted NER entities |
-| `tfidf_vectorizer.npz` | `python-api/kg_rag_artifacts/` | Lexical fallback/experiments |
+| `tfidf_vectorizer.npz` | `python-api/kg_rag_artifacts/` | Optional lexical fallback/experiments |
 
 ---
 
@@ -118,7 +118,7 @@ The backend intentionally uses **two separate servers** for clarity and scalabil
 | Server | Script | Port | Purpose |
 | --- | --- | --- | --- |
 | **QA Server** | `python-api/qa_server.py` | `5001` | DPR + FAISS + Groq RAG for medical Q&A |
-| **Recommendation Server** | `python-api/medical_v3.py` + `python-api/recommendations_server.py` | `5002` | KG-RAG + NER + semantic retrieval for medicine recommendations |
+| **Recommendation Server** | `python-api/recommendations_server.py` (wrapper) + `python-api/medical_v3.py` (pipeline) | `5002` | KG-RAG + NER + semantic retrieval for medicine recommendations |
 
 > There is also a combined `python-api/app.py` server for a unified API, but the **primary workflow uses the two servers above**.
 
@@ -263,6 +263,7 @@ python qa_server.py
 cd python-api
 python recommendations_server.py
 ```
+`recommendations_server.py` is a thin Flask wrapper that imports the KG-RAG pipeline logic from `medical_v3.py`.
 
 ### 4) Environment variable
 Set your Groq key before running the servers:
@@ -281,4 +282,3 @@ export GROQ_API_KEY="your_key_here"
 
 ## Disclaimer
 This project is for **educational and research purposes only**. It does **not** provide medical advice and should not replace professional medical consultation. Always consult qualified healthcare professionals for medical guidance.
-
