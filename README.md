@@ -98,10 +98,10 @@ flowchart TD
 
     B --> C2[Drugs dataset: normalize rows]
     C2 --> D2[NER + entity extraction]
-    D2 --> E2[Build knowledge graph (GraphML)]
+    D2 --> E2["Build knowledge graph (GraphML)"]
     C2 --> F2[Sentence-Transformer embeddings]
     F2 --> G2[FAISS index + corpus_embeddings.npy]
-    C2 --> H2[TF-IDF vectorizer (optional)]
+    C2 --> H2["TF-IDF vectorizer (optional)"]
 ```
 
 ### Artifact inventory (generated once, reused at runtime)
