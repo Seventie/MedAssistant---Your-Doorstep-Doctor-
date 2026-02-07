@@ -225,6 +225,7 @@ MedAssistant---Your-Doorstep-Doctor-/
 │   ├── qa_server.py             # DPR + FAISS + RAG Q&A server
 │   ├── medical_v3.py            # KG‑RAG pipeline logic
 │   ├── recommendations_server.py# HTTP server for recommendations
+│   ├── app.py                   # Optional unified API server (port 5000)
 │   ├── data/
 │   │   └── medquad_processed.csv
 │   ├── embeddings/
